@@ -1,7 +1,7 @@
-# Import Modules
 import pyautogui
 import random
 import tkinter as tk
+import time
 
 # Assign Variables
 x = 1280
@@ -29,35 +29,29 @@ def event(cycle, check, event_number, x):
         check = 0
         print('idle')
         window.after(400, update, cycle, check, event_number, x)  # no. 1,2,3,4 = idle
-        phrase1 = 'idle'
     elif event_number == 5:
         check = 1
         print('from idle to sleep')
         window.after(100, update, cycle, check, event_number, x)  # no. 5 = idle to sleep
-        phrase1 = 'from idle\n to sleep'
     elif event_number in walk_left:
         check = 4
         print('walking towards left')
         window.after(100, update, cycle, check, event_number, x)  # no. 6,7 = walk towards left
-        phrase1 = 'walking \ntowards right'
     elif event_number in walk_right:
         check = 5
         print('walking towards right')
         window.after(100, update, cycle, check, event_number, x)  # no 8,9 = walk towards right
-        phrase1 = 'walking \ntowards left'
     elif event_number in sleep_num:
         check = 2
         print('sleep')
         window.after(1000, update, cycle, check, event_number, x)  # no. 10,11,12,13,15 = sleep
-        phrase1 = 'sleep'
     elif event_number == 14:
         check = 3
         print('from sleep to idle')
         window.after(100, update, cycle, check, event_number, x)  # no. 15 = sleep to idle
-        phrase1 = 'from sleep\n to idle'
-    # canvas.create_text(50, 25, text= phrase1, fill="white", font=('Helvetica 7 bold'))
+    #canvas.create_text(50, 25, text= phrase1, fill="white", font=('Helvetica 7 bold'))
     print("changing text")
-    canvas.itemconfig(myText, text= phrase1)
+    # canvas.itemconfig(myText, text=phrase1)
 
 
 
@@ -101,12 +95,25 @@ def update(cycle, check, event_number, x):
         cycle, event_number = gif_work(cycle, walk_negative, event_number, 1, 9)
         x -= 3
 
-    window.geometry('100x150+' + str(x) + '+800')
+    window.geometry('100x150+' + str(x) + '+750')
     label.configure(image=frame)
+    update_clock()
     window.after(1, event, cycle, check, event_number, x)
 
 
+
+def update_clock():
+    now = time.strftime("%H:%M")
+    if now == "14:38":
+        canvas.itemconfig(myText, text="hellow")
+    else:
+        canvas.itemconfig(myText, text=now)
+
+
+
+
 window = tk.Tk()
+
 
 # call buddy's action .gif to an array
 idle = [tk.PhotoImage(file='Animations/idle.gif', format='gif -index %i' % (i)) for i in
@@ -130,22 +137,30 @@ walk_negative = [tk.PhotoImage(file='Animations/walking_negative.gif', format='g
 # walk_negative = [tk.PhotoImage(file=impath+'Animations/walking_negative.gif',format = 'gif -index %i' %(i)) for i in range(8)]#walk to right gif, 8 frames
 
 # window configuration
-window.config(highlightbackground='black')
+# window.config(highlightbackground='black')
 window.overrideredirect(True)
 #window.wm_attributes('-transparent', "white")
-window.wm_attributes('-transparent', "black")
+window.wm_attributes('-transparent', True)
+window.config(bg='systemTransparent')
+
 # window.wm_attributes('-transparentcolor', 'black')
 ## might have to consult this for cross-platform transparency solution: https://stackoverflow.com/questions/19080499/transparent-background-in-a-tkinter-window
 
-# assign label to cat
-label = tk.Label(window, bd=0, bg='black')
-label.pack()
+
+
 
 #Create a canvas object
-canvas= tk.Canvas(window, width= 100, height= 75, bg= 'black')
+canvas= tk.Canvas(window, width= 100, height= 150)
 #Add a text in Canvas
-myText = canvas.create_text(50, 25, text= '', fill="white", font=('Helvetica 7 bold'))
+myText = canvas.create_text(50, 25, text= '', fill="black", font=('Helvetica 15 bold'), justify='center')
+
+
+# assign label to cat
+label = tk.Label(window, bd=0)
+label.pack()
 canvas.pack()
+
+
 
 # loop the program
 window.after(1, update, cycle, check, event_number, x)
