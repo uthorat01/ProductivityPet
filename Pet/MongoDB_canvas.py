@@ -47,6 +47,7 @@ def createDoc(name, collection_, classes_, assignments_, assignments_dates, clas
     courses_val = dict(zip(classes_, classes_times))
     person = {"name": name, "Courses": courses_val, "Assignments": assignment_val}
     collection_.insert_one(person)
+    return courses_val, assignment_val
 
 
 def printAll(collection_):
@@ -96,7 +97,11 @@ def addPerson():
                         assignments_date.append(assignment.due_at_date.strftime("%m/%d/%Y"))
     classes_time, name = getCourses(classes)
     createDoc(name, collection, classes, assignments, assignments_date, classes_time)
+    return courses_dict,assignments_dict
 
-
-addPerson()
+# addPerson is a function that connects to convas. It asks user to unput their canvas API key, name and period for each class.
+#it will add this information to mongodb and also returns 2 dicts. 
+#courses dict looks like this CEN3031:11:45, CIS4930: 12:45 .... assignment_dict looks like this Sprint1 : 11/04/22
+  
+courses_dict, assignment_dict = addPerson()
 
