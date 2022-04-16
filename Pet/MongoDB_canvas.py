@@ -103,5 +103,7 @@ def addPerson():
 #it will add this information to mongodb and also returns 2 dicts. 
 #courses dict looks like this CEN3031:11:45, CIS4930: 12:45 .... assignment_dict looks like this Sprint1 : 11/04/22
   
-courses_dict, assignment_dict = addPerson()
+  
+  
+# courses_dict, assignment_dict = addPerson()
 
