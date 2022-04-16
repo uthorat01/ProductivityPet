@@ -5,6 +5,15 @@ import random
 import tkinter as tk
 import tkinter as ttk
 import time
+from MongoDB_canvas import *
+
+
+### this is an example, make sure it works for you and see how it works then delete
+## this function adds information to mongodb then returns 2 dicts
+## it takes in input from user from command line, we need to eventually change that to get that input from test file
+classes_dict, assignment_dict = addPerson()
+print(classes_dict,assignment_dict)
+
 
 window = tk.Tk()
 
