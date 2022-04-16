@@ -19,6 +19,11 @@ window.attributes('-topmost', True)
 # might have to consult this for cross-platform transparency solution:
 # https://stackoverflow.com/questions/19080499/transparent-background-in-a-tkinter-window
 
+# For Windos comment lines 11 - 20 and uncomment lines 23-25
+# window.config(highlightbackground='black')
+# window.overrideredirect(True)
+# window.wm_attributes('-transparent', "black")
+
 # Create a canvas object
 canvas = tk.Canvas(window, bg='#ffffff', width=100, height=40, bd=0)
 # Add a text in Canvas
