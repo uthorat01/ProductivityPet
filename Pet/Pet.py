@@ -1,14 +1,37 @@
 import pyautogui
 import random
 import tkinter as tk
+import tkinter as ttk
 import time
 
+window = tk.Tk()
+
+# Window Configuration
+# window.config(highlightbackground='black')
+window.overrideredirect(True)
+#window.wm_attributes('-transparent', "white")
+window.wm_attributes('-transparent', True)
+window.config(bg='systemTransparent')
+window.attributes('-topmost', True)
+# window.wm_attributes('-transparentcolor', 'black')
+## might have to consult this for cross-platform transparency solution: https://stackoverflow.com/questions/19080499/transparent-background-in-a-tkinter-window
+
+# Create a canvas object
+canvas= tk.Canvas(window, width= 100, height= 150)
+#Add a text in Canvas
+myText = canvas.create_text(50, 25, text='', fill="white", font=('Helvetica 15 bold'), justify='center')\
+
+# Assign Label to Pet
+label = tk.Label(window, bd=0)
+label.pack()
+canvas.pack()
+
 # Assign Variables
-x = 1280
+x = 1180
 cycle = 0
 check = 1
-
-# window = tk.Tk()
+tasks_dict = dict()
+task_list = []
 
 # Event Change
 idle_num = [1, 2, 3, 4]
@@ -18,45 +41,54 @@ walk_right = [8, 9]
 event_number = random.randrange(1, 3, 1)
 
 
-# impath = '//Users/yannalin/Documents/csprojects/GitHub/CEN3031Project/'
+# Call buddy's action .gif to an array
+idle = [tk.PhotoImage(file='Animations/idle.gif', format='gif -index %i' % (i)) for i in
+        range(5)]  # idle gif , 5 frames
+idle_to_sleep = [tk.PhotoImage(file='Animations/idle_to_sleep.gif', format='gif -index %i' % (i)) for i in
+                 range(8)]  # idle to sleep gif, 8 frames
+sleep = [tk.PhotoImage(file='Animations/sleep.gif', format='gif -index %i' % (i)) for i in
+         range(3)]  # sleep gif, 3 frames
+sleep_to_idle = [tk.PhotoImage(file='Animations/sleep_to_idle.gif', format='gif -index %i' % (i)) for i in
+                 range(8)]  # sleep to idle gif, 8 frames
+walk_positive = [tk.PhotoImage(file='Animations/walking_positive.gif', format='gif -index %i' % (i)) for i in
+                 range(8)]  # walk to left gif, 8 frames
+walk_negative = [tk.PhotoImage(file='Animations/walking_negative.gif', format='gif -index %i' % (i)) for i in
+                 range(8)]  # walk to right gif, 8 frames
 
 
 
-# transfer random no. to event
+# Transfer random no. to event
 def event(cycle, check, event_number, x):
-    print(check)
     if event_number in idle_num:
         check = 0
-        print('idle')
+        # print('idle')
         window.after(400, update, cycle, check, event_number, x)  # no. 1,2,3,4 = idle
     elif event_number == 5:
         check = 1
-        print('from idle to sleep')
+        # print('from idle to sleep')
         window.after(100, update, cycle, check, event_number, x)  # no. 5 = idle to sleep
     elif event_number in walk_left:
-        check = 4
-        print('walking towards left')
-        window.after(100, update, cycle, check, event_number, x)  # no. 6,7 = walk towards left
+        if x > 0:
+            check = 4
+            # print('walking towards left')
+            window.after(100, update, cycle, check, event_number, x)  # no. 6,7 = walk towards left
     elif event_number in walk_right:
-        check = 5
-        print('walking towards right')
-        window.after(100, update, cycle, check, event_number, x)  # no 8,9 = walk towards right
+        if x >= 980:
+            check = 5
+            # print('walking towards right')
+            window.after(100, update, cycle, check, event_number, x)  # no 8,9 = walk towards right
     elif event_number in sleep_num:
         check = 2
-        print('sleep')
+        # print('sleep')
         window.after(1000, update, cycle, check, event_number, x)  # no. 10,11,12,13,15 = sleep
     elif event_number == 14:
         check = 3
-        print('from sleep to idle')
+        # print('from sleep to idle')
         window.after(100, update, cycle, check, event_number, x)  # no. 15 = sleep to idle
-    #canvas.create_text(50, 25, text= phrase1, fill="white", font=('Helvetica 7 bold'))
-    print("changing text")
-    # canvas.itemconfig(myText, text=phrase1)
 
 
 
-# Make it Alive!
-# make the gif work
+# Make the gif work
 def gif_work(cycle, frames, event_number, first_num, last_num):
     if cycle < len(frames) - 1:
         cycle += 1
@@ -64,7 +96,6 @@ def gif_work(cycle, frames, event_number, first_num, last_num):
         cycle = 0
         event_number = random.randrange(first_num, last_num + 1, 1)
     return cycle, event_number
-
 
 # Update the Frame
 def update(cycle, check, event_number, x):
@@ -95,73 +126,43 @@ def update(cycle, check, event_number, x):
         cycle, event_number = gif_work(cycle, walk_negative, event_number, 1, 9)
         x -= 3
 
-    window.geometry('100x150+' + str(x) + '+750')
+
+    window.geometry('300x150+' + str(x) + '+700')
     label.configure(image=frame)
     update_clock()
+
     window.after(1, event, cycle, check, event_number, x)
 
-
-
+# Update the time
 def update_clock():
-    now = time.strftime("%H:%M")
-    if now == "14:38":
+    curr_time = time.strftime("%H:%M")
+    if curr_time == "22:54":
         canvas.itemconfig(myText, text="hellow")
     else:
-        canvas.itemconfig(myText, text=now)
+        canvas.itemconfig(myText, text=curr_time)
+
+# Allow User to add tasks to-do
+def add_tasks():
+    print("add task function call")
 
 
+exit_button = ttk.Button(
+    window,
+    text="x",
+    command=lambda: window.quit(),
+    cursor='hand2'
+)
+exit_button.place(x=0, y=0)
 
+add_task_button = ttk.Button(
+    window,
+    text="Add Task",
+    command=add_tasks,
+    state=tk.ACTIVE,
+    cursor='hand2'
+)
+add_task_button.place(x=0, y=30)
 
-window = tk.Tk()
-
-
-# call buddy's action .gif to an array
-idle = [tk.PhotoImage(file='../Animations/idle.gif', format='gif -index %i' % (i)) for i in
-        range(5)]  # idle gif , 5 frames
-idle_to_sleep = [tk.PhotoImage(file='../Animations/idle_to_sleep.gif', format='gif -index %i' % (i)) for i in
-                 range(8)]  # idle to sleep gif, 8 frames
-sleep = [tk.PhotoImage(file='../Animations/sleep.gif', format='gif -index %i' % (i)) for i in
-         range(3)]  # sleep gif, 3 frames
-sleep_to_idle = [tk.PhotoImage(file='../Animations/sleep_to_idle.gif', format='gif -index %i' % (i)) for i in
-                 range(8)]  # sleep to idle gif, 8 frames
-walk_positive = [tk.PhotoImage(file='../Animations/walking_positive.gif', format='gif -index %i' % (i)) for i in
-                 range(8)]  # walk to left gif, 8 frames
-walk_negative = [tk.PhotoImage(file='../Animations/walking_negative.gif', format='gif -index %i' % (i)) for i in
-                 range(8)]  # walk to right gif, 8 frames
-
-# idle = [tk.PhotoImage(file=impath+'Animations/idle.gif',format = 'gif -index %i' %(i)) for i in range(5)]#idle gif , 5 frames
-# idle_to_sleep = [tk.PhotoImage(file=impath+'Animations/idle_to_sleep.gif',format = 'gif -index %i' %(i)) for i in range(8)]#idle to sleep gif, 8 frames
-# sleep = [tk.PhotoImage(file=impath+'Animations/sleep.gif',format = 'gif -index %i' %(i)) for i in range(3)]#sleep gif, 3 frames
-# sleep_to_idle = [tk.PhotoImage(file=impath+'Animations/sleep_to_idle.gif',format = 'gif -index %i' %(i)) for i in range(8)]#sleep to idle gif, 8 frames
-# walk_positive = [tk.PhotoImage(file=impath+'Animations/walking_positive.gif',format = 'gif -index %i' %(i)) for i in range(8)]#walk to left gif, 8 frames
-# walk_negative = [tk.PhotoImage(file=impath+'Animations/walking_negative.gif',format = 'gif -index %i' %(i)) for i in range(8)]#walk to right gif, 8 frames
-
-# window configuration
-# window.config(highlightbackground='black')
-window.overrideredirect(True)
-#window.wm_attributes('-transparent', "white")
-window.wm_attributes('-transparent', True)
-window.config(bg='systemTransparent')
-
-# window.wm_attributes('-transparentcolor', 'black')
-## might have to consult this for cross-platform transparency solution: https://stackoverflow.com/questions/19080499/transparent-background-in-a-tkinter-window
-
-
-
-
-#Create a canvas object
-canvas= tk.Canvas(window, width= 100, height= 150)
-#Add a text in Canvas
-myText = canvas.create_text(50, 25, text= '', fill="black", font=('Helvetica 15 bold'), justify='center')
-
-
-# assign label to cat
-label = tk.Label(window, bd=0)
-label.pack()
-canvas.pack()
-
-
-
-# loop the program
+# Loop the program
 window.after(1, update, cycle, check, event_number, x)
 window.mainloop()
