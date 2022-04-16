@@ -96,8 +96,8 @@ def addPerson():
                         assignments.append(mod)
                         assignments_date.append(assignment.due_at_date.strftime("%m/%d/%Y"))
     classes_time, name = getCourses(classes)
-    createDoc(name, collection, classes, assignments, assignments_date, classes_time)
-    return courses_dict,assignments_dict
+    courses_dict, assignments_dict = createDoc(name, collection, classes, assignments, assignments_date, classes_time)
+    return courses_dict, assignments_dict
 
 # addPerson is a function that connects to convas. It asks user to unput their canvas API key, name and period for each class.
 #it will add this information to mongodb and also returns 2 dicts. 
