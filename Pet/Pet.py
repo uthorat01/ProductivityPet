@@ -1,3 +1,5 @@
+from functools import partial
+from tkinter import *
 import pyautogui
 import random
 import tkinter as tk
@@ -7,19 +9,20 @@ import time
 window = tk.Tk()
 
 # Window Configuration
-# window.config(highlightbackground='black')
+window.config(highlightbackground='#000')
 window.overrideredirect(True)
-#window.wm_attributes('-transparent', "white")
+# window.wm_attributes('-transparent', 'white')
 window.wm_attributes('-transparent', True)
 window.config(bg='systemTransparent')
 window.attributes('-topmost', True)
-# window.wm_attributes('-transparentcolor', 'black')
-## might have to consult this for cross-platform transparency solution: https://stackoverflow.com/questions/19080499/transparent-background-in-a-tkinter-window
+# window.wm_attributes('-transparentcolor', '#000')
+# might have to consult this for cross-platform transparency solution:
+# https://stackoverflow.com/questions/19080499/transparent-background-in-a-tkinter-window
 
 # Create a canvas object
-canvas= tk.Canvas(window, width= 100, height= 150)
-#Add a text in Canvas
-myText = canvas.create_text(50, 25, text='', fill="white", font=('Helvetica 15 bold'), justify='center')\
+canvas = tk.Canvas(window, bg='#ffffff', width=100, height=40, bd=0)
+# Add a text in Canvas
+myText = canvas.create_text(50, 25, text='', fill='#000', font='Helvetica 15 bold', justify='center')\
 
 # Assign Label to Pet
 label = tk.Label(window, bd=0)
@@ -30,7 +33,8 @@ canvas.pack()
 x = 1180
 cycle = 0
 check = 1
-tasks_dict = dict()
+category_dict = dict() # key-category string, value
+task_dict = dict()
 task_list = []
 
 # Event Change
@@ -40,21 +44,19 @@ walk_left = [6, 7]
 walk_right = [8, 9]
 event_number = random.randrange(1, 3, 1)
 
-
 # Call buddy's action .gif to an array
-idle = [tk.PhotoImage(file='Animations/idle.gif', format='gif -index %i' % (i)) for i in
+idle = [tk.PhotoImage(file='Animations/idle.gif', format='gif -index %i' % i) for i in
         range(5)]  # idle gif , 5 frames
-idle_to_sleep = [tk.PhotoImage(file='Animations/idle_to_sleep.gif', format='gif -index %i' % (i)) for i in
+idle_to_sleep = [tk.PhotoImage(file='Animations/idle_to_sleep.gif', format='gif -index %i' % i) for i in
                  range(8)]  # idle to sleep gif, 8 frames
-sleep = [tk.PhotoImage(file='Animations/sleep.gif', format='gif -index %i' % (i)) for i in
+sleep = [tk.PhotoImage(file='Animations/sleep.gif', format='gif -index %i' % i) for i in
          range(3)]  # sleep gif, 3 frames
-sleep_to_idle = [tk.PhotoImage(file='Animations/sleep_to_idle.gif', format='gif -index %i' % (i)) for i in
+sleep_to_idle = [tk.PhotoImage(file='Animations/sleep_to_idle.gif', format='gif -index %i' % i) for i in
                  range(8)]  # sleep to idle gif, 8 frames
-walk_positive = [tk.PhotoImage(file='Animations/walking_positive.gif', format='gif -index %i' % (i)) for i in
+walk_positive = [tk.PhotoImage(file='Animations/walking_positive.gif', format='gif -index %i' % i) for i in
                  range(8)]  # walk to left gif, 8 frames
-walk_negative = [tk.PhotoImage(file='Animations/walking_negative.gif', format='gif -index %i' % (i)) for i in
+walk_negative = [tk.PhotoImage(file='Animations/walking_negative.gif', format='gif -index %i' % i) for i in
                  range(8)]  # walk to right gif, 8 frames
-
 
 
 # Transfer random no. to event
@@ -87,7 +89,6 @@ def event(cycle, check, event_number, x):
         window.after(100, update, cycle, check, event_number, x)  # no. 15 = sleep to idle
 
 
-
 # Make the gif work
 def gif_work(cycle, frames, event_number, first_num, last_num):
     if cycle < len(frames) - 1:
@@ -96,6 +97,7 @@ def gif_work(cycle, frames, event_number, first_num, last_num):
         cycle = 0
         event_number = random.randrange(first_num, last_num + 1, 1)
     return cycle, event_number
+
 
 # Update the Frame
 def update(cycle, check, event_number, x):
@@ -126,12 +128,12 @@ def update(cycle, check, event_number, x):
         cycle, event_number = gif_work(cycle, walk_negative, event_number, 1, 9)
         x -= 3
 
-
     window.geometry('300x150+' + str(x) + '+700')
     label.configure(image=frame)
     update_clock()
 
     window.after(1, event, cycle, check, event_number, x)
+
 
 # Update the time
 def update_clock():
@@ -141,10 +143,30 @@ def update_clock():
     else:
         canvas.itemconfig(myText, text=curr_time)
 
-# Allow User to add tasks to-do
-def add_tasks():
-    print("add task function call")
 
+# Allow user to add categories/courses
+def add_category(category):
+    print("add category")
+    print(category.get())
+    # add cat to the cat dict
+
+
+# Allow user to add tasks to a task/assignment list
+def add_task(category, task, deadline):
+    print("add task")
+    print(category.get())
+    print(task.get())
+    print(deadline.get())
+
+    # check cat dict for a existing key, add task value to existing cat key
+    # if not existing, add cat as key and add task as value
+    # then add task to
+
+
+# Buttons, Labels, and Entries
+category = tk.StringVar()
+task = tk.StringVar()
+deadline = tk.StringVar()
 
 exit_button = ttk.Button(
     window,
@@ -154,14 +176,45 @@ exit_button = ttk.Button(
 )
 exit_button.place(x=0, y=0)
 
+add_category = partial(add_category, category)
+add_category_button = ttk.Button(
+    window,
+    text="Add Category",
+    command=add_category,
+    cursor='hand2'
+)
+add_category_button.place(x=0, y=30)
+
+add_task = partial(add_task, category, task, deadline)
 add_task_button = ttk.Button(
     window,
     text="Add Task",
-    command=add_tasks,
-    state=tk.ACTIVE,
+    command=add_task,
     cursor='hand2'
 )
-add_task_button.place(x=0, y=30)
+add_task_button.place(x=0, y=60)
+
+
+# category_label = Label(
+#         window,
+#         text="Category",
+#         bd=4,
+#         relief='ridge'
+#     )
+# category_label.pack(side=LEFT)
+# category_label.place(x=0, y=30)
+
+
+category_entry = Entry(
+        window,
+        textvariable=category,
+        relief='ridge',
+        insertofftime=600
+    )
+category_entry.pack(side=RIGHT)
+category_entry.place(x=66, y=30)
+# category_entry.focus_set()
+
 
 # Loop the program
 window.after(1, update, cycle, check, event_number, x)
