@@ -71,13 +71,13 @@ def getCourses(classes):
     return classes_time, name
 
 
-def addPerson():
+def addPerson(canvas_key):
     classes = []
     assignments = []
     assignments_date = []
 
     API_URL = "https://ufl.instructure.com"
-    canvas_key = input("Please input your canvas key ")
+    # canvas_key = input("Please input your canvas key ")
     API_KEY = canvas_key
     canvas = Canvas(API_URL, API_KEY)
     courseList = canvas.get_courses()
@@ -96,8 +96,8 @@ def addPerson():
                         assignments.append(mod)
                         assignments_date.append(assignment.due_at_date.strftime("%m/%d/%Y"))
     classes_time, name = getCourses(classes)
-    createDoc(name, collection, classes, assignments, assignments_date, classes_time)
-    return courses_dict,assignments_dict
+    courses_dict, assignments_dict = createDoc(name, collection, classes, assignments, assignments_date, classes_time)
+    return courses_dict, assignments_dict
 
 # addPerson is a function that connects to convas. It asks user to unput their canvas API key, name and period for each class.
 #it will add this information to mongodb and also returns 2 dicts. 
