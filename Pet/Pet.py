@@ -222,10 +222,6 @@ def add_task(task, deadline):
     print(task_dict)
 
 
-#     
-def print_sorted_tasks():
-
-
 # Buttons, Labels, and Entries
 # category = tk.StringVar()
 # task = tk.StringVar()
