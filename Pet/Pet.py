@@ -24,15 +24,18 @@ window.attributes('-topmost', True)
 # window.overrideredirect(True)
 # window.wm_attributes('-transparent', "black")
 
+
 # Create a canvas object
 canvas = tk.Canvas(window, bg='#ffffff', width=100, height=40, bd=0)
 # Add a text in Canvas
 myText = canvas.create_text(50, 25, text='', fill='#000', font='Helvetica 15 bold', justify='center')\
 
+
 # Assign Label to Pet
 label = tk.Label(window, bd=0)
 label.pack()
 canvas.pack()
+
 
 # Assign Variables
 x = 1180
@@ -41,13 +44,6 @@ check = 1
 category_dict = dict()  # key-category string, value-period/time
 task_dict = dict()  # key-task string, value-deadline string
 task_list = []  # organize the tasks into a list by deadline
-
-# this is an example, make sure it works for you and see how it works then delete
-# this function adds information to mongodb then returns 2 dicts
-# it takes in input from user from command line, we need to eventually change that to get that input from test file
-
-# category_dict, task_dict = addPerson()
-# print(category_dict, task_dict)
 
 
 # Event Change
@@ -172,52 +168,62 @@ def options():
     canvas_api_key_var = tk.StringVar()
 
     options_window = Toplevel(window)
-    options_window.geometry('400x200+100+200')
+    options_window.geometry('450x200+100+200')
     options_window.title("Options")
 
     # Option window - create filler for empty 0th row
     options_window.grid_rowconfigure(0, minsize=10)
 
-    # Option window - adding tasks and deadlines
-    task_label = tk.Label(options_window, text="Task")
-    task_label.grid(row=1, column=0, sticky=E)
-
-    deadline_label = tk.Label(options_window, text="Deadline")
-    deadline_label.grid(row=2, column=0, sticky=E)
-
-    task_entry = tk.Entry(options_window, textvariable=task_var, relief='ridge', insertofftime=600)
-    task_entry.grid(row=1, column=1)
-
-    deadline_entry = tk.Entry(options_window, textvariable=deadline_var, relief='ridge', insertofftime=600)
-    deadline_entry.grid(row=2, column=1)
-
-    add_task_button = ttk.Button(options_window, text="Add Task", command=partial(add_task, task_var, deadline_var), cursor='hand2')
-    add_task_button.grid(row=2, column=2, sticky=W)
-
-    # Create filler for empty 3rd row
-    options_window.grid_rowconfigure(3, minsize=10)
-
     # Option window - Ask for API key for Canvas linking
     canvas_api_key_label = tk.Label(options_window, text="Canvas API Key")
-    canvas_api_key_label.grid(row=4, column=0, sticky=E)
+    canvas_api_key_label.grid(row=1, column=0, sticky=E)
 
     canvas_api_key_entry = tk.Entry(options_window, textvariable=canvas_api_key_var, relief='ridge', insertofftime=600)
-    canvas_api_key_entry.grid(row=4, column=1)
+    canvas_api_key_entry.grid(row=1, column=1)
 
     connect_to_canvas_button = ttk.Button(options_window, text="Connect to Canvas", command=partial(connect_to_canvas, canvas_api_key_var), cursor='hand2')
-    connect_to_canvas_button.grid(row=4, column=2, sticky=W)
+    connect_to_canvas_button.grid(row=1, column=2, sticky=W)
+
+    # Create filler for empty 2nd row
+    options_window.grid_rowconfigure(2, minsize=10)
+
+    # Option window - adding tasks and deadlines
+    task_label = tk.Label(options_window, text="Task")
+    task_label.grid(row=3, column=0, sticky=E)
+
+    deadline_label = tk.Label(options_window, text="Deadline")
+    deadline_label.grid(row=4, column=0, sticky=E)
+
+    task_entry = tk.Entry(options_window, textvariable=task_var, relief='ridge', insertofftime=600)
+    task_entry.grid(row=3, column=1)
+
+    deadline_entry = tk.Entry(options_window, textvariable=deadline_var, relief='ridge', insertofftime=600)
+    deadline_entry.grid(row=4, column=1)
+
+    add_task_button = ttk.Button(options_window, text="Add Task", command=partial(add_task, task_var, deadline_var), cursor='hand2')
+    add_task_button.grid(row=4, column=2, sticky=W)
+
+
+# Connect and retrieve canvas courses and assignment+deadlines
+def connect_to_canvas(canvas_api_key):
+    temp_dict = addPerson(canvas_api_key.get())
+
+    for key, value in temp_dict[0].items():
+        category_dict.update({key: value})
+    for key, value in temp_dict[1].items():
+        task_dict.update({key: value})
+
+    print(category_dict, task_dict)
 
 
 # Add tasks to a task/assignment list
 def add_task(task, deadline):
-    print("add task")
-
     task_dict.update({task.get(): deadline.get()})
     print(task_dict)
 
 
-def connect_to_canvas(canvas_api_key):
-    addPerson(canvas_api_key.get())
+#     
+def print_sorted_tasks():
 
 
 # Buttons, Labels, and Entries
@@ -226,23 +232,12 @@ def connect_to_canvas(canvas_api_key):
 # deadline = tk.StringVar()
 # canvas_api_key = tk.StringVar()
 
-
 # Buttons, Labels, and Entries
-options_button = ttk.Button(
-    window,
-    text="Options",
-    command=options,
-    cursor='hand2'
-)
+options_button = ttk.Button(window, text="Options", command=options, cursor='hand2')
 # options_button.pack()
 options_button.place(x=0, y=0)
 
-exit_button = ttk.Button(
-    window,
-    text="Exit",
-    command=lambda: window.quit(),
-    cursor='hand2'
-)
+exit_button = ttk.Button(window, text="Exit", command=lambda: window.quit(), cursor='hand2')
 # exit_button.pack()
 exit_button.place(x=0, y=30)
 
