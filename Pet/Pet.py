@@ -1,8 +1,11 @@
+import collections
+import operator
 import random
 import time
 import tkinter as tk
 import tkinter as ttk
 from Backend.MongoDB_canvas import *
+from datetime import datetime
 from functools import partial
 from tkinter import *
 
@@ -27,9 +30,8 @@ window.attributes('-topmost', True)
 
 # Create a canvas object
 canvas = tk.Canvas(window, bg='#ffffff', width=100, height=40, bd=0)
-# Add a text in Canvas
-myText = canvas.create_text(50, 25, text='', fill='#000', font='Helvetica 15 bold', justify='center')\
-
+# Add text in Canvas
+myText = canvas.create_text(50, 25, text='', fill='#000', font='Helvetica 15 bold', justify='center')
 
 # Assign Label to Pet
 label = tk.Label(window, bd=0)
@@ -43,7 +45,7 @@ cycle = 0
 check = 1
 category_dict = dict()  # key-category string, value-period/time
 task_dict = dict()  # key-task string, value-deadline string
-task_list = []  # organize the tasks into a list by deadline
+sorted_task_list = []  # organize the tasks into a list by deadline
 
 
 # Event Change
@@ -147,6 +149,7 @@ def update(cycle, check, event_number, x):
 # Update the time
 def update_clock():
     curr_time = time.strftime("%H:%M")
+    # canvas.itemconfig(myText, text="jsaljdfkal")
     if curr_time == "22:54":
         canvas.itemconfig(myText, text="hellow")
     else:
@@ -168,7 +171,7 @@ def options():
     canvas_api_key_var = tk.StringVar()
 
     options_window = Toplevel(window)
-    options_window.geometry('450x200+100+200')
+    options_window.geometry('450x200+100+100')
     options_window.title("Options")
 
     # Option window - create filler for empty 0th row
@@ -181,7 +184,8 @@ def options():
     canvas_api_key_entry = tk.Entry(options_window, textvariable=canvas_api_key_var, relief='ridge', insertofftime=600)
     canvas_api_key_entry.grid(row=1, column=1)
 
-    connect_to_canvas_button = ttk.Button(options_window, text="Connect to Canvas", command=partial(connect_to_canvas, canvas_api_key_var), cursor='hand2')
+    connect_to_canvas_button = ttk.Button(options_window, text="Connect to Canvas",
+                                          command=partial(connect_to_canvas, canvas_api_key_var), cursor='hand2')
     connect_to_canvas_button.grid(row=1, column=2, sticky=W)
 
     # Create filler for empty 2nd row
@@ -200,8 +204,18 @@ def options():
     deadline_entry = tk.Entry(options_window, textvariable=deadline_var, relief='ridge', insertofftime=600)
     deadline_entry.grid(row=4, column=1)
 
-    add_task_button = ttk.Button(options_window, text="Add Task", command=partial(add_task, task_var, deadline_var), cursor='hand2')
+    add_task_button = ttk.Button(options_window, text="Add Task",
+                                 command=partial(add_task, task_var, deadline_var), cursor='hand2')
     add_task_button.grid(row=4, column=2, sticky=W)
+
+    # Create filler for empty 5th row
+    options_window.grid_rowconfigure(5, minsize=20)
+
+    print_tasks_button = ttk.Button(options_window, text="Print Tasks", command=print_tasks, cursor='hand2')
+    print_tasks_button.grid(row=6, column=0, sticky=W)
+
+    print_sorted_tasks_button = ttk.Button(options_window, text="Print Sorted Tasks", command=print_sorted_tasks, cursor='hand2')
+    print_sorted_tasks_button.grid(row=6, column=1, sticky=W)
 
 
 # Connect and retrieve canvas courses and assignment+deadlines
@@ -220,6 +234,34 @@ def connect_to_canvas(canvas_api_key):
 def add_task(task, deadline):
     task_dict.update({task.get(): deadline.get()})
     print(task_dict)
+
+
+def sort_tasks():
+    sorted_task_list = sorted(task_dict.items(), key=lambda kv: kv[1])
+    return sorted_task_list
+
+
+def print_tasks():
+    lines = ""
+    for key, value in task_dict.items():
+        lines = lines + key + ": " + value + "\n"
+    print_message_window(lines)
+
+
+def print_sorted_tasks():
+    lines = ""
+    for i in sort_tasks():
+        lines = lines + i[1] + ": " + i[0] + "\n"
+    print_message_window(lines)
+
+
+def print_message_window(lines):
+    message_window = Toplevel(window)
+    message_window.geometry('450x400+100+350')
+    message_window.title("A Message for You")
+
+    message = tk.Label(message_window, text=lines, justify=LEFT, relief=RAISED, width=40)
+    message.pack()
 
 
 # Buttons, Labels, and Entries
