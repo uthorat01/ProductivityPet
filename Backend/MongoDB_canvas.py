@@ -71,13 +71,13 @@ def getCourses(classes):
     return classes_time, name
 
 
-def addPerson():
+def addPerson(canvas_key):
     classes = []
     assignments = []
     assignments_date = []
 
     API_URL = "https://ufl.instructure.com"
-    canvas_key = input("Please input your canvas key ")
+    # canvas_key = input("Please input your canvas key ")
     API_KEY = canvas_key
     canvas = Canvas(API_URL, API_KEY)
     courseList = canvas.get_courses()
