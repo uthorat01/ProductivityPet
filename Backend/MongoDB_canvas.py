@@ -36,6 +36,16 @@ def getId(collection_, name):
     for collection_ in cursor:
         if collection_['name'] == name:
             return collection_['_id']
+          
+          
+def getCourses_Assignments(collection_, name):
+    results = collection.find({"name": name})
+    dict_ = results[0]
+    del dict_['_id']
+    del dict_['name']
+    courses = dict_['Courses']
+    assi = dict_['Assignments']
+    return courses, assi
 
 
 def deleteAll(collection_):
