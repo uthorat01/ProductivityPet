@@ -31,7 +31,7 @@ window.attributes('-topmost', True)
 # Create a canvas object
 canvas = tk.Canvas(window, bg='#ffffff', width=100, height=40, bd=0)
 # Add text in Canvas
-myText = canvas.create_text(50, 25, text='', fill='#000', font='Helvetica 15 bold', justify='center')
+myText = canvas.create_text(50, 25, text='', fill='#000', font='Helvetica 15 bold', justify='center', width=100)
 
 # Assign Label to Pet
 label = tk.Label(window, bd=0)
@@ -43,6 +43,8 @@ canvas.pack()
 x = 1180
 cycle = 0
 check = 1
+reminder_time = "11:59"
+reminder_text = "Check your assignments!"
 category_dict = dict()  # key-category string, value-period/time
 task_dict = dict()  # key-task string, value-deadline string
 sorted_task_list = []  # organize the tasks into a list by deadline
@@ -141,19 +143,9 @@ def update(cycle, check, event_number, x):
 
     window.geometry('300x150+' + str(x) + '+700')
     label.configure(image=frame)
-    update_clock()
+    update_clock(reminder_time, reminder_text)
 
     window.after(1, event, cycle, check, event_number, x)
-
-
-# Update the time
-def update_clock():
-    curr_time = time.strftime("%H:%M")
-    # canvas.itemconfig(myText, text="jsaljdfkal")
-    if curr_time == "22:54":
-        canvas.itemconfig(myText, text="hellow")
-    else:
-        canvas.itemconfig(myText, text=curr_time)
 
 
 # # Allow user to add categories/courses
@@ -166,21 +158,23 @@ def update_clock():
 
 
 def options():
-    task_var = tk.StringVar()
-    deadline_var = tk.StringVar()
     canvas_api_key_var = tk.StringVar()
     name = tk.StringVar()
+    task_var = tk.StringVar()
+    deadline_var = tk.StringVar()
+    reminder_time_var = tk.StringVar()
+    reminder_text_var = tk.StringVar()
 
     options_window = Toplevel(window)
-    options_window.geometry('450x200+100+100')
+    options_window.geometry('530x300+100+100')
     options_window.title("Options")
 
     # Option window - create filler for empty 0th row
     options_window.grid_rowconfigure(0, minsize=10)
 
     # Option window - Ask for API key for Canvas linking
-    canvas_api_key_label = tk.Label(options_window, text="Canvas API Key")
-    canvas_api_key_label.grid(row=1, column=0, sticky=E)
+    canvas_api_key_label = tk.Label(options_window, text="Canvas API Key: ")
+    canvas_api_key_label.grid(row=1, column=0, sticky=W, padx=10)
 
     canvas_api_key_entry = tk.Entry(options_window, textvariable=canvas_api_key_var, relief='ridge', insertofftime=600)
     canvas_api_key_entry.grid(row=1, column=1)
@@ -189,41 +183,71 @@ def options():
                                           command=partial(connect_to_canvas, canvas_api_key_var), cursor='hand2')
     connect_to_canvas_button.grid(row=1, column=2, sticky=W)
 
-    name_entry = tk.Entry(options_window, textvariable=name, relief='ridge', insertofftime=600)
-    name_entry.grid(row=1, column=2)
-
-    get_DB_info_button = ttk.Button(options_window, text="Get Info",
-                                          command=partial(get_DB_info, name), cursor='hand2')
-    get_DB_info_button.grid(row=2, column=2, sticky=W)
-
     # Create filler for empty 2nd row
     options_window.grid_rowconfigure(2, minsize=10)
 
-    # Option window - adding tasks and deadlines
-    task_label = tk.Label(options_window, text="Task")
-    task_label.grid(row=3, column=0, sticky=E)
+    # In the event the user has inputted API key already, they can retrieve their info with their name
+    # Security flaws with this currently haha, but will change this to username/password login in future
+    name_label = tk.Label(options_window, text="Name: ")
+    name_label.grid(row=3, column=0, sticky=W, padx=10)
 
-    deadline_label = tk.Label(options_window, text="Deadline")
-    deadline_label.grid(row=4, column=0, sticky=E)
+    name_entry = tk.Entry(options_window, textvariable=name, relief='ridge', insertofftime=600)
+    name_entry.grid(row=3, column=1)
+
+    get_DB_info_button = ttk.Button(options_window, text="Get Canvas Info",
+                                    command=partial(get_DB_info, name), cursor='hand2')
+    get_DB_info_button.grid(row=3, column=2, sticky=W)
+
+    # Create filler for empty 4th row
+    options_window.grid_rowconfigure(4, minsize=20)
+
+    # Option window - adding tasks and deadlines
+    task_label = tk.Label(options_window, text="Task: ")
+    task_label.grid(row=5, column=0, sticky=W, padx=10)
+
+    deadline_label = tk.Label(options_window, text="Deadline: ")
+    deadline_label.grid(row=6, column=0, sticky=W, padx=10)
 
     task_entry = tk.Entry(options_window, textvariable=task_var, relief='ridge', insertofftime=600)
-    task_entry.grid(row=3, column=1)
+    task_entry.grid(row=5, column=1)
 
     deadline_entry = tk.Entry(options_window, textvariable=deadline_var, relief='ridge', insertofftime=600)
-    deadline_entry.grid(row=4, column=1)
+    deadline_entry.grid(row=6, column=1)
 
     add_task_button = ttk.Button(options_window, text="Add Task",
                                  command=partial(add_task, task_var, deadline_var), cursor='hand2')
-    add_task_button.grid(row=4, column=2, sticky=W)
+    add_task_button.grid(row=6, column=2, sticky=W)
 
-    # Create filler for empty 5th row
-    options_window.grid_rowconfigure(5, minsize=20)
+    # Create filler for empty 7th row
+    options_window.grid_rowconfigure(7, minsize=20)
 
+    # Print tasks - organized by order added into "database"
     print_tasks_button = ttk.Button(options_window, text="Print Tasks", command=print_tasks, cursor='hand2')
-    print_tasks_button.grid(row=6, column=0, sticky=W)
+    print_tasks_button.grid(row=8, column=0, sticky=W, padx=10)
 
+    # Print tasks - organized by date
     print_sorted_tasks_button = ttk.Button(options_window, text="Print Sorted Tasks", command=print_sorted_tasks, cursor='hand2')
-    print_sorted_tasks_button.grid(row=6, column=1, sticky=W)
+    print_sorted_tasks_button.grid(row=8, column=1, sticky=W)
+
+    # Create filler for empty 9th row
+    options_window.grid_rowconfigure(9, minsize=20)
+
+    # Set reminder time and text
+    reminder_time_label = tk.Label(options_window, text="Reminder time (military): ")
+    reminder_time_label.grid(row=10, column=0, sticky=W, padx=10)
+
+    reminder_text_label = tk.Label(options_window, text="Reminder text: ")
+    reminder_text_label.grid(row=11, column=0, sticky=W, padx=10)
+
+    reminder_time_entry = tk.Entry(options_window, textvariable=reminder_time_var, relief='ridge', insertofftime=600)
+    reminder_time_entry.grid(row=10, column=1)
+
+    reminder_text_entry = tk.Entry(options_window, textvariable=reminder_text_var, relief='ridge', insertofftime=600)
+    reminder_text_entry.grid(row=11, column=1)
+
+    set_reminder_button = ttk.Button(options_window, text="Set reminder",
+                                     command=partial(set_reminder, reminder_time_var, reminder_text_var), cursor='hand2')
+    set_reminder_button.grid(row=11, column=2, sticky=W)
 
 
 # Connect and retrieve canvas courses and assignment+deadlines
@@ -235,7 +259,6 @@ def connect_to_canvas(canvas_api_key):
     for key, value in temp_dict[1].items():
         task_dict.update({key: value})
 
-    #print(category_dict, task_dict)
 
 def get_DB_info(name):
     temp_dict = getCourses_Assignments(collection,name.get())
@@ -278,6 +301,22 @@ def print_message_window(lines):
 
     message = tk.Label(message_window, text=lines, justify=LEFT, relief=RAISED, width=40)
     message.pack()
+
+
+def set_reminder(time, text):
+    global reminder_time
+    reminder_time= time.get()
+    global reminder_text
+    reminder_text = text.get()
+
+
+# Update the time
+def update_clock(reminder_time, reminder_text):
+    curr_time = time.strftime("%H:%M")
+    if curr_time == reminder_time:
+        canvas.itemconfig(myText, text=reminder_text)
+    else:
+        canvas.itemconfig(myText, text=curr_time)
 
 
 # Buttons, Labels, and Entries
