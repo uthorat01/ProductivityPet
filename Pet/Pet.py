@@ -169,6 +169,7 @@ def options():
     task_var = tk.StringVar()
     deadline_var = tk.StringVar()
     canvas_api_key_var = tk.StringVar()
+    name = tk.StringVar()
 
     options_window = Toplevel(window)
     options_window.geometry('450x200+100+100')
@@ -187,6 +188,13 @@ def options():
     connect_to_canvas_button = ttk.Button(options_window, text="Connect to Canvas",
                                           command=partial(connect_to_canvas, canvas_api_key_var), cursor='hand2')
     connect_to_canvas_button.grid(row=1, column=2, sticky=W)
+
+    name_entry = tk.Entry(options_window, textvariable=name, relief='ridge', insertofftime=600)
+    name_entry.grid(row=1, column=2)
+
+    get_DB_info_button = ttk.Button(options_window, text="Get Info",
+                                          command=partial(get_DB_info, name), cursor='hand2')
+    get_DB_info_button.grid(row=2, column=2, sticky=W)
 
     # Create filler for empty 2nd row
     options_window.grid_rowconfigure(2, minsize=10)
@@ -227,7 +235,15 @@ def connect_to_canvas(canvas_api_key):
     for key, value in temp_dict[1].items():
         task_dict.update({key: value})
 
-    print(category_dict, task_dict)
+    #print(category_dict, task_dict)
+
+def get_DB_info(name):
+    temp_dict = getCourses_Assignments(collection,name.get())
+
+    for key, value in temp_dict[0].items():
+        category_dict.update({key: value})
+    for key, value in temp_dict[1].items():
+        task_dict.update({key: value})
 
 
 # Add tasks to a task/assignment list
