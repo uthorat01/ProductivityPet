@@ -40,7 +40,7 @@ canvas.pack()
 
 
 # Assign Variables
-x = 1180
+x = 980
 cycle = 0
 check = 1
 reminder_time = "11:59"
@@ -332,14 +332,40 @@ def update_clock(reminder_time, reminder_text):
 
 def change_pet():
     global idle
+    global idle_to_sleep
+    global sleep
+    global sleep_to_idle
+    global walk_positive
+    global walk_negative
     global pet
     if pet == "cat":
         idle = [tk.PhotoImage(file='Pet/Animations/dog_idle.gif', format='gif -index %i' % i) for i in
             range(5)]
+        idle_to_sleep = [tk.PhotoImage(file='Pet/Animations/dog_idle.gif', format='gif -index %i' % i) for i in
+            range(8)]
+        sleep = [tk.PhotoImage(file='Pet/Animations/dog_idle.gif', format='gif -index %i' % i) for i in
+            range(3)]
+        sleep_to_idle = [tk.PhotoImage(file='Pet/Animations/dog_idle.gif', format='gif -index %i' % i) for i in
+            range(8)]
+        walk_positive = [tk.PhotoImage(file='Pet/Animations/dog_idle.gif', format='gif -index %i' % i) for i in
+            range(8)]
+        walk_negative = [tk.PhotoImage(file='Pet/Animations/dog_idle.gif', format='gif -index %i' % i) for i in
+            range(8)]
         pet = "dog"
     elif pet == "dog":
         idle = [tk.PhotoImage(file='Pet/Animations/idle.gif', format='gif -index %i' % i) for i in
-        range(5)]
+                range(5)]  # idle gif , 5 frames
+        idle_to_sleep = [tk.PhotoImage(file='Pet/Animations/idle_to_sleep.gif', format='gif -index %i' % i) for i in
+                         range(8)]  # idle to sleep gif, 8 frames
+        sleep = [tk.PhotoImage(file='Pet/Animations/sleep.gif', format='gif -index %i' % i) for i in
+                 range(3)]  # sleep gif, 3 frames
+        sleep_to_idle = [tk.PhotoImage(file='Pet/Animations/sleep_to_idle.gif', format='gif -index %i' % i) for i in
+                         range(8)]  # sleep to idle gif, 8 frames
+        walk_positive = [tk.PhotoImage(file='Pet/Animations/walking_positive.gif', format='gif -index %i' % i) for i in
+                         range(8)]  # walk to left gif, 8 frames
+        walk_negative = [tk.PhotoImage(file='Pet/Animations/walking_negative.gif', format='gif -index %i' % i) for i in
+                         range(8)]  # walk to right gif, 8 frames
+        pet == "cat"
 
 
 # Buttons, Labels, and Entries
@@ -361,3 +387,4 @@ exit_button.place(x=0, y=30)
 # Loop the program
 window.after(1, update, cycle, check, event_number, x)
 window.mainloop()
+
