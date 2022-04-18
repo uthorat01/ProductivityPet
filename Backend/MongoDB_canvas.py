@@ -31,6 +31,16 @@ schedule_time = {1: '7:25', 2: '8:30', 3: '9:35', 4: '10:40', 5: '11:45', 6: '12
 # some functions for easing interactions with Mongodb database.. sadly not all operations can be translated to functions
 
 
+def getCourses_Assignments(collection_, name):
+    results = collection.find({"name": name})
+    dict_ = results[0]
+    del dict_['_id']
+    del dict_['name']
+    courses = dict_['Courses']
+    assi = dict_['Assignments']
+    return courses, assi
+
+
 def getId(collection_, name):
     cursor = collection.find({})
     for collection_ in cursor:
