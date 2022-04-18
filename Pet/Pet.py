@@ -45,6 +45,8 @@ cycle = 0
 check = 1
 reminder_time = "11:59"
 reminder_text = "Check your assignments!"
+pet = "cat"
+
 category_dict = dict()  # key-category string, value-period/time
 task_dict = dict()  # key-task string, value-deadline string
 sorted_task_list = []  # organize the tasks into a list by deadline
@@ -166,7 +168,7 @@ def options():
     reminder_text_var = tk.StringVar()
 
     options_window = Toplevel(window)
-    options_window.geometry('530x300+100+100')
+    options_window.geometry('530x350+100+100')
     options_window.title("Options")
 
     # Option window - create filler for empty 0th row
@@ -249,6 +251,15 @@ def options():
                                      command=partial(set_reminder, reminder_time_var, reminder_text_var), cursor='hand2')
     set_reminder_button.grid(row=11, column=2, sticky=W)
 
+    # Create filler for empty 12th row
+    options_window.grid_rowconfigure(12, minsize=20)
+
+    # Change pet idle gif to dog idle
+    set_reminder_button = ttk.Button(options_window, text="Change pet",
+                                     command=change_pet,
+                                     cursor='hand2')
+    set_reminder_button.grid(row=13, column=0, sticky=W, padx=10)
+
 
 # Connect and retrieve canvas courses and assignment+deadlines
 def connect_to_canvas(canvas_api_key):
@@ -317,6 +328,18 @@ def update_clock(reminder_time, reminder_text):
         canvas.itemconfig(myText, text=reminder_text)
     else:
         canvas.itemconfig(myText, text=curr_time)
+
+
+def change_pet():
+    global idle
+    global pet
+    if pet == "cat":
+        idle = [tk.PhotoImage(file='Pet/Animations/dog_idle.gif', format='gif -index %i' % i) for i in
+            range(5)]
+        pet = "dog"
+    elif pet == "dog":
+        idle = [tk.PhotoImage(file='Pet/Animations/idle.gif', format='gif -index %i' % i) for i in
+        range(5)]
 
 
 # Buttons, Labels, and Entries
