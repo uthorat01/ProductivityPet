@@ -40,7 +40,7 @@ canvas.pack()
 
 
 # Assign Variables
-x = 980
+x = 100
 cycle = 0
 check = 1
 reminder_time = "11:59"
@@ -85,13 +85,13 @@ def event(cycle, check, event_number, x):
         # print('from idle to sleep')
         window.after(100, update, cycle, check, event_number, x)  # no. 5 = idle to sleep
     elif event_number in walk_left:
-        if x > 0:
+        # if x > 0:
             check = 4
             # print('walking towards left')
             window.after(100, update, cycle, check, event_number, x)  # no. 6,7 = walk towards left
     elif event_number in walk_right:
-        if x >= 980:
-            check = 5
+        # if x <= 980:
+        #     check = 5
             # print('walking towards right')
             window.after(100, update, cycle, check, event_number, x)  # no 8,9 = walk towards right
     elif event_number in sleep_num:
@@ -387,4 +387,5 @@ exit_button.place(x=0, y=30)
 # Loop the program
 window.after(1, update, cycle, check, event_number, x)
 window.mainloop()
+
 
