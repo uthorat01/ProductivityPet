@@ -1,0 +1,41 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+# Editor-based HTTP Client requests
+/httpRequests/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+Backend/__pycache__
+
+# Environments
+venv/
+
+# OS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+Pet/.vscode/
+
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg

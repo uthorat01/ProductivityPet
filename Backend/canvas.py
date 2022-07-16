@@ -5,7 +5,7 @@ import pytz
 
 API_URL = "https://ufl.instructure.com"
 
-API_KEY = "insertKey"
+API_KEY = "insert key"
 
 canvas = Canvas(API_URL, API_KEY)
 
@@ -14,7 +14,7 @@ courseList = canvas.get_courses()
 for i in courseList:
     if not(hasattr(i, 'access_restricted_by_date')):
 
-        if(i.enrollment_term_id == 2081):
+        if(i.enrollment_term_id == 2084):
             course = canvas.get_course(i.id)
             print("\n" + course.course_code + "\n")
             assignmentList = course.get_assignments()

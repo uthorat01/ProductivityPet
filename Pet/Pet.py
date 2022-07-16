@@ -4,10 +4,27 @@ import random
 import time
 import tkinter as tk
 import tkinter as ttk
-from Backend.MongoDB_canvas import *
 from datetime import datetime
 from functools import partial
 from tkinter import *
+
+import sys
+import os
+# getting the name of the directory
+# where the this file is present.
+current = os.path.dirname(os.path.realpath(__file__))
+  
+# Getting the parent directory name
+# where the current directory is present.
+parent = os.path.dirname(current)
+  
+# adding the parent directory to 
+# the sys.path.
+sys.path.append(parent)
+  
+#now we can import the module in the parent
+# directory.
+import Backend.MongoDB_canvas
 
 
 window = tk.Tk()
@@ -54,9 +71,9 @@ sorted_task_list = []  # organize the tasks into a list by deadline
 
 # Event Change
 idle_num = [1, 2, 3, 4]
-sleep_num = [10, 11, 12, 13, 15]
 walk_left = [6, 7]
 walk_right = [8, 9]
+sleep_num = [10, 11, 12, 13, 14]
 event_number = random.randrange(1, 3, 1)
 
 # Call buddy's action .gif to an array
@@ -86,20 +103,20 @@ def event(cycle, check, event_number, x):
         window.after(100, update, cycle, check, event_number, x)  # no. 5 = idle to sleep
     elif event_number in walk_left:
         # if x > 0:
-            check = 4
+            check = 2
             # print('walking towards left')
             window.after(100, update, cycle, check, event_number, x)  # no. 6,7 = walk towards left
     elif event_number in walk_right:
         # if x <= 980:
-        #     check = 5
+        #     check = 3
             # print('walking towards right')
             window.after(100, update, cycle, check, event_number, x)  # no 8,9 = walk towards right
     elif event_number in sleep_num:
-        check = 2
+        check = 4
         # print('sleep')
-        window.after(1000, update, cycle, check, event_number, x)  # no. 10,11,12,13,15 = sleep
-    elif event_number == 14:
-        check = 3
+        window.after(1000, update, cycle, check, event_number, x)  # no. 10,11,12,13,14 = sleep
+    elif event_number == 15:
+        check = 5
         # print('from sleep to idle')
         window.after(100, update, cycle, check, event_number, x)  # no. 15 = sleep to idle
 
@@ -124,39 +141,30 @@ def update(cycle, check, event_number, x):
     elif check == 1:
         frame = idle_to_sleep[cycle]
         cycle, event_number = gif_work(cycle, idle_to_sleep, event_number, 10, 10)
-    # sleep
-    elif check == 2:
-        frame = sleep[cycle]
-        cycle, event_number = gif_work(cycle, sleep, event_number, 10, 15)
-    # sleep to idle
-    elif check == 3:
-        frame = sleep_to_idle[cycle]
-        cycle, event_number = gif_work(cycle, sleep_to_idle, event_number, 1, 1)
     # walk toward left
-    elif check == 4:
+    elif check == 2:
         frame = walk_positive[cycle]
         cycle, event_number = gif_work(cycle, walk_positive, event_number, 1, 9)
         x -= -3
     # walk towards right
-    elif check == 5:
+    elif check == 3:
         frame = walk_negative[cycle]
         cycle, event_number = gif_work(cycle, walk_negative, event_number, 1, 9)
         x -= 3
+    # sleep
+    elif check == 4:
+        frame = sleep[cycle]
+        cycle, event_number = gif_work(cycle, sleep, event_number, 10, 15)
+    # sleep to idl
+    elif check == 5:
+        frame = sleep_to_idle[cycle]
+        cycle, event_number = gif_work(cycle, sleep_to_idle, event_number, 1, 1)
 
     window.geometry('300x150+' + str(x) + '+700')
     label.configure(image=frame)
     update_clock(reminder_time, reminder_text)
 
     window.after(1, event, cycle, check, event_number, x)
-
-
-# # Allow user to add categories/courses
-# def add_category(category):
-#     print("add category")
-#     print(category.get())
-#     # add cat to the cat dict
-#     category_dict.update({str(category.get()) : ""})
-#     print (category_dict)
 
 
 def options():
@@ -263,7 +271,7 @@ def options():
 
 # Connect and retrieve canvas courses and assignment+deadlines
 def connect_to_canvas(canvas_api_key):
-    temp_dict = addPerson(canvas_api_key.get())
+    temp_dict = Backend.MongoDB_canvas.addPerson(canvas_api_key.get())
 
     for key, value in temp_dict[0].items():
         category_dict.update({key: value})
@@ -272,7 +280,7 @@ def connect_to_canvas(canvas_api_key):
 
 
 def get_DB_info(name):
-    temp_dict = getCourses_Assignments(collection,name.get())
+    temp_dict = Backend.MongoDB_canvas.getCourses_Assignments(Backend.MongoDB_canvas.collection,name.get())
 
     for key, value in temp_dict[0].items():
         category_dict.update({key: value})
@@ -368,11 +376,6 @@ def change_pet():
         pet == "cat"
 
 
-# Buttons, Labels, and Entries
-# category = tk.StringVar()
-# task = tk.StringVar()
-# deadline = tk.StringVar()
-# canvas_api_key = tk.StringVar()
 
 # Buttons, Labels, and Entries
 options_button = ttk.Button(window, text="Options", command=options, cursor='hand2')
