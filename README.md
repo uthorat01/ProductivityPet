@@ -1,5 +1,6 @@
-# Productivity Pet
-A CEN3101 Project by Urmi Thorat, Yanna Lin, Michael Cardei, and Saketh Renangi
+# ProDOGtivity Pet
+A CEN3101 Project by Urmi Thorat, Yanna Lin, Michael Cardei, and Saketh Renangi, with updates being maintained by Yanna Lin
+
 ## Description 
 The pandemic has led to a higher dependence and use of online learning. This unprepared shift in the education system has created challenges. One of these challenges includes decreased student engagement. Productivity Pet provides a solution to this issue.
 
