@@ -4,9 +4,8 @@ from pymongo import MongoClient
 from datetime import datetime
 import pytz
 
-# Connecting to the MongoDB cluster. ADMIN and ADMIN are the username/password I created for the cluster
-client = pymongo.MongoClient("mongodb+srv://ADMIN:ADMIN@cen-project.mj6mb.mongodb."
-                             "net/Test?retryWrites=true&w=majority")
+# Connecting to the MongoDB cluster. test and test are the username/password I created for the cluster
+client = pymongo.MongoClient("mongodb+srv://test:test@cluster0.vaqqkj5.mongodb.net/?retryWrites=true&w=majority")
 
 # Entering the Pet_Project database
 db = client["Pet_Project"]
@@ -94,7 +93,7 @@ def addPerson(canvas_key):
     for i in courseList:
         if not (hasattr(i, 'access_restricted_by_date')):
 
-            if i.enrollment_term_id == 2081:
+            if i.enrollment_term_id == 2084:
                 course = canvas.get_course(i.id)
                 classes.append(course.course_code)
                 assignmentList = course.get_assignments()
