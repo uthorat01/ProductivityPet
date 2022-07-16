@@ -17,6 +17,14 @@ Backend/__pycache__
 # Environments
 .venv/
 
+# OS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+Pet/.vscode/
+
 # Distribution / packaging
 bin/
 build/
