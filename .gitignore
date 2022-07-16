@@ -15,7 +15,7 @@ __pycache__/
 Backend/__pycache__
 
 # Environments
-.venv/
+venv/
 
 # OS
 .DS_Store
