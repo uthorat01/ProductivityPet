@@ -1,5 +1,5 @@
 # ProDOGtivity Pet
-![Dog Idle](Pet/Animations/dog_idle.gif) ![Dog Idle](Pet/Animations/dog_idle.gif) ![Dog Idle](Pet/Animations/dog_idle.gif)
+![Dog Idle](Pet/Animations/dog_idle.gif)
 
 A CEN3101 Project by Urmi Thorat, Yanna Lin, Michael Cardei, and Saketh Renangi, with updates being maintained by Yanna Lin
 
@@ -26,6 +26,7 @@ Please make sure to update tests as appropriate. Currently, tests are found in t
 
 ## Credits
 Basic animations and sprites from The Nobody on https://medium.com/analytics-vidhya/create-your-own-desktop-pet-with-python-5b369be18868.
+
 ![Cat Idle](Pet/Animations/idle.gif) ![Cat Idle to Sleep](Pet/Animations/idle_to_sleep.gif) ![Cat Sleep](Pet/Animations/idle.gif)
 
 ## License
