@@ -1,4 +1,6 @@
 # ProDOGtivity Pet
+![Dog Image](Pet/Animations/dog_idle.gif)
+
 A CEN3101 Project by Urmi Thorat, Yanna Lin, Michael Cardei, and Saketh Renangi, with updates being maintained by Yanna Lin
 
 ## Description 
