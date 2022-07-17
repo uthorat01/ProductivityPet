@@ -1,5 +1,5 @@
 # ProDOGtivity Pet
-![Dog Image](Pet/Animations/dog_idle.gif)
+![Dog Idle](Pet/Animations/dog_idle.gif)
 
 A CEN3101 Project by Urmi Thorat, Yanna Lin, Michael Cardei, and Saketh Renangi, with updates being maintained by Yanna Lin
 
@@ -18,9 +18,14 @@ The desktop pet software is activated by running the Pet.py file within the pet 
 2. Click on your profile in the upper left corner and select _Settings_.
 3. Press the _+ New Access Token_ button and input   Productivity Pet   in the   Purpose   text edit. Leave _Expiration_ blank.
 4. Copy the provided API key for use in the Productivity Pet.
+
 ## Contributions. 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate. Currently, tests are found in the   Backend  directory. 
+
+## Credits
+![Cat Idle](Pet/Animations/idle.gif) ![Cat Idle to Sleep](Pet/Animations/idle_to_sleep.gif) ![Cat Sleep](Pet/Animations/idle.gif)
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
