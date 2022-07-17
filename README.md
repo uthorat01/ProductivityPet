@@ -27,7 +27,7 @@ Please make sure to update tests as appropriate. Currently, tests are found in t
 ## Credits
 Basic animations and sprites from The Nobody on https://medium.com/analytics-vidhya/create-your-own-desktop-pet-with-python-5b369be18868.
 
-![Cat Idle](Pet/Animations/idle.gif) ![Cat Idle to Sleep](Pet/Animations/idle_to_sleep.gif) ![Cat Sleep](Pet/Animations/idle.gif)
+![Cat Idle](Pet/Animations/idle.gif) ![Cat Idle to Sleep](Pet/Animations/idle_to_sleep.gif) ![Cat Sleep](Pet/Animations/idle.gif) ![Cat Sleep](Pet/Animations/sleep_to_idle.gif) ![Cat Sleep](Pet/Animations/walking_negative.gif) ![Cat Sleep](Pet/Animations/walking_positive.gif)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
